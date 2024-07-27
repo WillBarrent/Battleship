@@ -28,12 +28,24 @@ describe('Testing Gameboard Class', () => {
         expect(gameboard.placeShip(carrier, [6, 7])).toBe("ERROR")
     });
 
-    test('Whether or not attack hit a ship', () => {
+    test('Whether or not attack hit a ship: Case 1', () => {
+        const gameboard = new Gameboard();
+        const battleship = new Ship(4);
+        gameboard.placeShip(battleship, [5 , 4]);
 
+        expect(gameboard.receiveAttack(5, 4)).toBe(true);
+    });
+    
+    test('Whether or not attack hit a ship: Case 2', () => {
+        const gameboard = new Gameboard();
+        const battleship = new Ship(4);
+        gameboard.placeShip(battleship, [5 , 4]);
+
+        expect(gameboard.receiveAttack(6, 5)).toBe(false);
     });
 
     test('Keep tracking of missed attacks properly', () => {
-
+        
     });
     
     test('Report whether or not all of their ships have been sunk', () => {
