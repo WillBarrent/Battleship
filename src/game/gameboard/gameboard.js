@@ -2,6 +2,8 @@ import Ship from '../ship/ship';
 
 class Gameboard {
     #board;
+    #hitted = 'H';
+    #missed = 'M';
     constructor() {
         this.#board = this.createGameBoard();
     }
@@ -31,6 +33,20 @@ class Gameboard {
         });
 
         return board;
+    }
+
+    receiveAttack(x, y) {
+        const board = this.getGameBoard();
+        let attackCoord = board[x][y];
+        if (!(attackCoord instanceof Ship)
+            || attackCoord === this.#hitted
+            || attackCoord === this.#missed) {
+            return false;
+        }
+
+        attackCoord = this.#hitted;
+
+        return true;
     }
 }
 
