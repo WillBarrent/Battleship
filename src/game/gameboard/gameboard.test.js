@@ -45,10 +45,20 @@ describe('Testing Gameboard Class', () => {
     });
 
     test('Keep tracking of missed attacks properly', () => {
-        
+        const gameboard = new Gameboard();
+        const submarine = new Ship(4);
+        gameboard.placeShip(submarine, [5 , 4]);
+        gameboard.receiveAttack(5, 5);
+        expect(gameboard.getGameBoard()[5][5]).toBe('M');
     });
     
     test('Report whether or not all of their ships have been sunk', () => {
-
-    })
+        const gameboard = new Gameboard();
+        const battleship = new Ship(4);
+        gameboard.placeShip(battleship, [5 , 4]);
+        gameboard.receiveAttack(6, 5);
+        gameboard.receiveAttack(7, 5);
+        gameboard.receiveAttack(8, 5);
+        expect(gameboard.isAllShipSunk()).toBe(true);
+    });
 })
