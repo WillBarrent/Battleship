@@ -4,12 +4,18 @@ class Gameboard {
     #board;
     #hitted = 'H';
     #missed = 'M';
+    #shipsPosition = [];
     constructor() {
         this.#board = this.createGameBoard();
     }
 
     createGameBoard() {
-        return new Array(10).fill([...(new Array(10).fill([]))]);
+        const array = (new Array(10)).fill([]);
+        array.forEach((_, i) => {
+            array[i] = [...(new Array(10)).fill([])];
+        });
+
+        return array;
     }
 
     getGameBoard() {
@@ -26,11 +32,14 @@ class Gameboard {
             return "ERROR";
         }
 
-        const positions = (new Array(ship.length)).fill(null);
+        const positions = (new Array(ship.length)).fill(ship);
+
         positions.forEach(position => {
-            board[x][y] = ship;
+            board[x][y] = position;
             x += 1;
         });
+
+        this.#shipsPosition.push(coordinates);
 
         return board;
     }
@@ -38,15 +47,35 @@ class Gameboard {
     receiveAttack(x, y) {
         const board = this.getGameBoard();
         let attackCoord = board[x][y];
+        const isInstanceOf = attackCoord instanceof Ship;
+        (this.#board)[x][y] = !isInstanceOf ? this.#missed : "";
         if (!(attackCoord instanceof Ship)
             || attackCoord === this.#hitted
             || attackCoord === this.#missed) {
             return false;
         }
 
-        attackCoord = this.#hitted;
+        console.log((this.#board)[x][y]);
+        (this.#board)[x][y] = this.#hitted;
 
         return true;
+    }
+
+    isAllShipSunk() {
+        const allShips = this.#shipsPosition;
+        const isHitted = true;
+        const board = this.getGameBoard();
+        let x, y, ship;
+        x = y = ship = null;
+
+        for (let i = 0; i < allShips.length && isHitted != true; i++) {
+            x = allShips[i][0], y = allShips[i][1];
+            ship = board[x][y];
+            if (ship.isSunk())
+                isHitted = true;
+        }
+
+        return isHitted;
     }
 }
 
