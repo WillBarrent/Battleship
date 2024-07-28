@@ -12,13 +12,19 @@ describe('Testing Gameboard Class', () => {
         const gameboard = new Gameboard();
         const carrier = new Ship(5);
         gameboard.placeShip(carrier, [4, 4]);
-        const board = new Array(10).fill([...(new Array(10).fill([]))]);
+
+        const board = new Array(10).fill([]);
+        board.forEach((_, i) => {
+            board[i] = [...(new Array(10)).fill([])];
+        });
+
         const positions = [[4, 4], [5, 4], [6, 4], [7, 4], [8, 4]];
         positions.forEach(position => {
             const x = position[0];
             const y = position[1];
             board[x][y] = carrier;
         })
+
         expect(gameboard.getGameBoard()).toEqual(board)
     });
     
