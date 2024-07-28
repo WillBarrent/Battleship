@@ -54,8 +54,7 @@ class Gameboard {
             || attackCoord === this.#missed) {
             return false;
         }
-
-        console.log((this.#board)[x][y]);
+        
         (this.#board)[x][y] = this.#hitted;
 
         return true;
