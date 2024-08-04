@@ -1,8 +1,15 @@
 import { appearElement } from "../utils/appearElement";
 import { createElement } from "../utils/createElement";
 
-function createBoard() {
+import Radar from '../../assets/radar.png';
+
+function createBoard(boardType = 'player') {
     const board = createElement('div', 'board');
+
+    if (boardType === 'ai') {
+        board.style.backgroundImage = `url(${Radar})`;
+        board.classList.add('ai');
+    }
 
     for (let i = 1; i <= 10; i++) {
         const div = createPosition('position-number', i)
