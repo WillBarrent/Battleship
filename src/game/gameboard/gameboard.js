@@ -22,6 +22,10 @@ class Gameboard {
         return this.#board;
     }
 
+    getShipPositions() {
+        return this.#shipsPosition;
+    }
+
     placeShip(shipType, coordinates) {
         const ship = shipType;
         let x = coordinates[0];
@@ -47,14 +51,16 @@ class Gameboard {
     receiveAttack(x, y) {
         const board = this.getGameBoard();
         let attackCoord = board[x][y];
+
         const isInstanceOf = attackCoord instanceof Ship;
         (this.#board)[x][y] = !isInstanceOf ? this.#missed : "";
+
         if (!(attackCoord instanceof Ship)
             || attackCoord === this.#hitted
             || attackCoord === this.#missed) {
             return false;
         }
-        
+
         (this.#board)[x][y] = this.#hitted;
 
         return true;
