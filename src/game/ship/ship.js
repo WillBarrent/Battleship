@@ -1,7 +1,8 @@
 class Ship {
     #hitNum;
-    constructor(length = 0) {
+    constructor(length = 0, type) {
         this.length = length;
+        this.type = type;
         this.#hitNum = 0;
     }
 
