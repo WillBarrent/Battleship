@@ -25,10 +25,12 @@ function createBoard(boardType = 'player') {
     const emptyPosition = createElement('div', 'position');
     appearElement(board, emptyPosition);
 
-    for (let i = 99; i >= 0; i--) {
-        const div = createElement('div', 'square');
-        div.dataset.position = `${i}`;
-        appearElement(board, div);
+    for (let i = 0; i <= 9; i++) {
+        for (let j = 0; j <= 9; j++) {
+            const div = createElement('div', 'square');
+            div.dataset.position = `${i} ${j}`;
+            appearElement(board, div);
+        }
     }
 
     return board;
@@ -36,7 +38,7 @@ function createBoard(boardType = 'player') {
 
 function createPosition(className = "empty", textContent) {
     const div = createElement('div', className);
-    
+
     if (className === "empty") {
         return div;
     }
@@ -45,4 +47,4 @@ function createPosition(className = "empty", textContent) {
     return div;
 }
 
-export {createBoard as default};
+export { createBoard as default };
