@@ -14,6 +14,14 @@ import Patrol from '../../assets/ships/patrol.png';
 // Rescue
 // Patrol
 
+const shipsAssets = {
+    'battleship': Battleship,
+    'cruiser': Cruiser,
+    'destroyer': Destroyer,
+    'rescue': Rescue,
+    'patrol': Patrol,
+};
+
 function createShip(shipName, image) {
     const ship = createElement('div', shipName);
     const shipImage = loadImage(image, 'ship__img');
@@ -23,30 +31,25 @@ function createShip(shipName, image) {
     return ship;
 }
 
+function loadSingleShip(x, y, gameboard) {
+    const start = 2;
+    const ship = gameboard[x][y];
+    const shipType = ship.type;
+    const buildShip = createShip(shipType, shipsAssets[shipType]);
+    buildShip.style.gridRow = `${start + x} / ${start + x + ship.length}`;
+    buildShip.style.gridColumn = `${start + y} / ${start + y + 1}`;
+
+    return buildShip;
+}
+
 function loadShips(board) {
     const shipPositions = board.getShipPositions();
     const gameboard = board.getGameBoard();
 
-    const shipsAssets = {
-        'battleship': Battleship,
-        'cruiser': Cruiser,
-        'destroyer': Destroyer,
-        'rescue': Rescue,
-        'patrol': Patrol,
-    };
-
     const boardClass = document.querySelector('.board');
 
-    let x = null, y = null;
-    let start = 2;
-
     shipPositions.forEach((position) => {
-        x = position[0], y = position[1];
-        const ship = gameboard[x][y];
-        const shipType = ship.type;
-        const buildShip = createShip(shipType, shipsAssets[shipType]);
-        buildShip.style.gridRow = `${start + x} / ${start + x + ship.length}`;
-        buildShip.style.gridColumn = `${start + y} / ${start + y + 1}`;
+        const buildShip = loadSingleShip(position[0], position[1], gameboard);
         appearElement(boardClass, buildShip);
     });
 }
