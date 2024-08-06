@@ -5,6 +5,7 @@ class Gameboard {
     #hitted = 'H';
     #missed = 'M';
     #shipsPosition = [];
+    #shipsTypes = [];
     constructor() {
         this.#board = this.createGameBoard();
     }
@@ -25,6 +26,18 @@ class Gameboard {
     getShipPositions() {
         return this.#shipsPosition;
     }
+    
+    getShipTypes() {
+        return this.#shipsTypes;
+    }
+
+    getHitted() {
+        return this.#hitted;
+    }
+
+    getMissed() {
+        return this.#missed;
+    }
 
     placeShip(shipType, coordinates) {
         const ship = shipType;
@@ -44,23 +57,28 @@ class Gameboard {
         });
 
         this.#shipsPosition.push(coordinates);
+        this.#shipsTypes.push(shipType.type);
 
         return board;
     }
 
     receiveAttack(x, y) {
         const board = this.getGameBoard();
+
         let attackCoord = board[x][y];
 
         const isInstanceOf = attackCoord instanceof Ship;
-        (this.#board)[x][y] = !isInstanceOf ? this.#missed : "";
+
+        if (!isInstanceOf)
+            (this.#board)[x][y] = this.#missed;
 
         if (!(attackCoord instanceof Ship)
             || attackCoord === this.#hitted
             || attackCoord === this.#missed) {
             return false;
         }
-
+        
+        this.#board[x][y].hit();
         (this.#board)[x][y] = this.#hitted;
 
         return true;
