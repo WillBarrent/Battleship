@@ -53,4 +53,4 @@ function loadShips(board) {
     });
 }
 
-export { createShip as default, loadShips } 
+export { createShip as default, loadShips, loadSingleShip } 
