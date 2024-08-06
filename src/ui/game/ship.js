@@ -31,9 +31,8 @@ function createShip(shipName, image) {
     return ship;
 }
 
-function loadSingleShip(x, y, gameboard) {
+function loadSingleShip(x, y, ship) {
     const start = 2;
-    const ship = gameboard[x][y];
     const shipType = ship.type;
     const buildShip = createShip(shipType, shipsAssets[shipType]);
     buildShip.style.gridRow = `${start + x} / ${start + x + ship.length}`;
@@ -49,7 +48,7 @@ function loadShips(board) {
     const boardClass = document.querySelector('.board');
 
     shipPositions.forEach((position) => {
-        const buildShip = loadSingleShip(position[0], position[1], gameboard);
+        const buildShip = loadSingleShip(position[0], position[1], gameboard[position[0]][position[1]]);
         appearElement(boardClass, buildShip);
     });
 }
