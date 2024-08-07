@@ -29,6 +29,8 @@ function createBoard(boardType = 'player') {
         for (let j = 0; j <= 9; j++) {
             const div = createElement('div', 'square');
             div.dataset.position = `${i} ${j}`;
+            div.style.gridRow = `${i + 2} / ${i + 3}`;
+            div.style.gridColumn = `${j + 2} / ${j + 3}`;
             appearElement(board, div);
         }
     }
