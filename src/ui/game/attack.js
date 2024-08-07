@@ -62,4 +62,73 @@ function aiTurn(playerGameboard, playerBoard, ai) {
     }
 }
 
+function destroyEffect(ship, board, gameboard) {
+    const [x, y] = getShipPositionByType(ship, gameboard);
+
+    const destroyedShip = loadSingleShip(x, y, ship);
+    appearElement(board, destroyedShip);
+    fieldDisclosure(ship.length, [x, y], board, gameboard.getGameBoard());
+}
+
+function attackEffect(element, typeOfAttack = "M") {
+    const div = createElement('div', 'missed-attack');
+    const image = typeOfAttack === "M" ? Miss : Hit;
+    const imageClass = typeOfAttack === "M" ? "missed-attack__img" : "hitted-attack__img";
+    const imgEl = loadImage(image, imageClass);
+
+    appearElement(div, imgEl);
+
+    const position = element.dataset.position.split(' ');
+    const X = +position[0] + 2, Y = +position[1] + 2;
+
+    div.style.gridRow = `${X} / ${X + 1}`;
+    div.style.gridColumn = `${Y} / ${Y + 1}`;
+
+    return div;
+}
+
+function fieldDisclosure(shipLength, coords, board, gameboard) {
+    const fullCoords = (new Array(shipLength)).fill(null).map((_, c) => [coords[0] + c, coords[1]]);
+    const disclosurePos = [];
+    const surFields = [
+        [0, 1],
+        [1, 0],
+        [1, 1],
+        [0, -1],
+        [-1, 0],
+        [-1, -1],
+        [-1, 1],
+        [1, -1]
+    ];
+    let x, y, surX, surY;
+
+    fullCoords.forEach(coord => {
+        x = coord[0], y = coord[1];
+        surFields.forEach(sur => {
+            surX = sur[0] + x, surY = sur[1] + y;
+            if ((surX) >= 0 && (surY) >= 0
+                && gameboard[surX][surY]
+                && gameboard[surX][surY] !== 'M'
+                && gameboard[surX][surY] !== 'H') {
+                const square = board.querySelector(`[data-position="${surX} ${surY}"]`);
+                gameboard[surX][surY] = 'M';
+                const effect = attackEffect(square, gameboard[surX][surY]);
+                appearElement(board, effect);
+            }
+        });
+    });
+}
+
+function getShipPositionByType(ship, gameboard) {
+    let shipPosition = gameboard.getShipPositions();
+    let shipTypes = gameboard.getShipTypes();
+    const shipType = ship.type;
+    const shipTypeIndex = shipTypes.findIndex(type => type === shipType);
+
+    const x = shipPosition[shipTypeIndex][0];
+    const y = shipPosition[shipTypeIndex][1];
+
+    return [x, y];
+}
+
 export { attackMoves as default }
