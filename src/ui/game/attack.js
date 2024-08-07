@@ -7,6 +7,28 @@ import { createElement } from "../utils/createElement";
 import { loadImage } from "../utils/loadImage";
 import { loadSingleShip } from "./ship";
 
+function attackMoves(player, ai) {
+    const playerBoard = document.querySelector('.board');
+    const aiBoard = document.querySelector('.board.ai');
+
+    const playerGameboard = player.gameboard;
+    const aiGameboard = ai.gameboard;
+
+    aiBoard.addEventListener('click', function (e) {
+        const target = e.target;
+
+        if (target.classList.contains('square')) {
+            const position = target.dataset.position.split(' ');
+
+            let X = +position[0], Y = +position[1];
+
+            playerTurn(target, aiGameboard, aiBoard, X, Y);
+
+            aiTurn(playerGameboard, playerBoard, ai);
+        }
+    })
+}
+
 function playerTurn(target, aiGameboard, aiBoard, X, Y) {
     let ship = null;
     if (aiGameboard.getGameBoard()[X][Y] instanceof Ship) {
@@ -39,3 +61,5 @@ function aiTurn(playerGameboard, playerBoard, ai) {
         fieldDisclosure(ship.length, [x, y], playerBoard, playerGameboard.getGameBoard());
     }
 }
+
+export { attackMoves as default }
