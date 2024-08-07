@@ -12,22 +12,29 @@ class Player {
 
     makeRandomAttack(gameboard) {
         let randomX, randomY;
-        randomX = randomY = Math.round((Math.random() * 100) % 9);
 
+        let ship = null;
+
+        randomX = Math.round((Math.random() * 100) % 9);
+        randomY = Math.round((Math.random() * 100) % 9)
         const hitted = gameboard.getHitted();
         const missed = gameboard.getMissed();
     
-        gameboard = gameboard.getGameBoard();
+        const board = gameboard.getGameBoard();
 
-        while (gameboard[randomX][randomY] === hitted
-            || gameboard[randomX][randomY] === missed
+        while (board[randomX][randomY] === hitted
+            || board[randomX][randomY] === missed
         ) {
-            randomX = randomY = Math.round((Math.random() * 100) % 9);
+            randomX = Math.round((Math.random() * 100) % 9);
+            randomY = Math.round((Math.random() * 100) % 9);
         }
 
-        gameboard[randomX][randomY] = gameboard[randomX][randomY] instanceof Ship ? hitted : missed;
+        if (board[randomX][randomY] instanceof Ship) 
+            ship = board[randomX][randomY];
 
-        return [gameboard[randomX][randomY], randomX, randomY];
+        gameboard.receiveAttack(randomX, randomY);
+
+        return [board[randomX][randomY], randomX, randomY, ship];
     }
 }
 
