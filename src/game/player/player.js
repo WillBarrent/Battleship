@@ -60,66 +60,66 @@ class Player {
             {
                 name: "patrol",
                 length: 3,
-            }
-        ];
-
-        const testFields = [
-            [0, 1],
-            [1, 0],
-            [1, 1],
-            [0, -1],
-            [-1, 0],
-            [-1, -1],
-            [-1, 1],
-            [1, -1]
+            },
         ];
 
         let randomX = null, randomY = null;
 
         shipTypes.forEach(type => {
-            randomX = Math.round((Math.random() * 100) % 9);
-            randomY = Math.round((Math.random() * 100) % 9);
-
             const ship = new Ship(type.length, type.name);
+            let j = 0;
 
-            let shipPositions = null;
+            do {
+                randomX = Math.round(Math.random() * 100) % 9;
+                randomY = Math.round(Math.random() * 100) % 9;
 
-            let head = null, tail = null;
+            } while ((randomX + ship.length - 1) > 9 || this.spaceAvailable(gameboard, [randomX, randomY], ship))
 
-            while (false) {
-                randomX = Math.round((Math.random() * 100) % 9);
-                randomY = Math.round((Math.random() * 100) % 9);
+            gameboard.placeShip(ship, [randomX, randomY]);
+        })
+    }
 
-                shipPositions = (new Array(type.length)).fill(null).map((_) => {
-                    return [randomX++, randomY];
-                });
+    spaceAvailable(gameboard, positions, ship) {
+        const head = [positions[0], positions[1]];
+        const tail = [positions[0] + ship.length - 1, positions[1]];
 
-                head = shipPositions.at(0), tail = shipPositions.at(-1);
-                let field = null;
+        const isPosition = (gameboard, x, y) => {
+            return (x >= 0 && y >= 0 && x < 10 && y < 10) ? gameboard[x][y] : "none";
+        }
 
-                for (let i = 0; i < testFields.length; i++) {
-                    field = testFields[i]
-                    const headX = field[0] + head[0],
-                        headY = field[1] + head[1];
-                    const tailX = field[0] + tail[0],
-                        tailY = field[1] + tail[1];
+        let isThereAnyShip = false;
+        let currentPosition = [];
 
-                    if (headX <= 9 && headY <= 9) {
+        let x, y;
 
-                    }
+        gameboard = gameboard.getGameBoard();
 
-                    if  (tailX <= 9 && tailY <= 9) {
+        for (let i = 0; i < ship.length && !isThereAnyShip; i++) {
+            currentPosition = [positions[0] + i, positions[1]];
 
-                    }
-                }
+            x = currentPosition[0], y = currentPosition[1];
 
-                j += 1;
+            if (head.toString() === currentPosition.toString()) {
+                isThereAnyShip = isPosition(gameboard, x - 1, y - 1) instanceof Ship
+                    || isPosition(gameboard, x - 1, y) instanceof Ship
+                    || isPosition(gameboard, x - 1, y + 1) instanceof Ship
+                    || isPosition(gameboard, x, y - 1) instanceof Ship
+                    || isPosition(gameboard, x, y + 1) instanceof Ship
+                    || isPosition(gameboard, x, y) instanceof Ship
+            } else if (tail.toString() === currentPosition.toString()) {
+                isThereAnyShip = isPosition(gameboard, x + 1, y - 1) instanceof Ship
+                    || isPosition(gameboard, x + 1, y) instanceof Ship
+                    || isPosition(gameboard, x + 1, y + 1) instanceof Ship
+                    || isPosition(gameboard, x, y - 1) instanceof Ship
+                    || isPosition(gameboard, x, y + 1) instanceof Ship
+                    || isPosition(gameboard, x, y) instanceof Ship
+            } else {
+                isThereAnyShip = isPosition(gameboard, x, y - 1) instanceof Ship
+                    || isPosition(gameboard, x, y + 1) instanceof Ship
+                    || isPosition(gameboard, x, y) instanceof Ship
             }
-
-            for (let i = randomX; i < type.length; i++) {
-                gameboard.getGameBoard()[randomX][randomY] = ship;
-            }
-        });
+        }
+        return isThereAnyShip;
     }
 }
 
