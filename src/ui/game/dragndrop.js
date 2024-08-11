@@ -1,3 +1,7 @@
+import Ship from '../../game/ship/ship';
+import { appearElement } from '../utils/appearElement';
+import { loadSingleShip } from './ship';
+
 function dragndrop(selection, gameboard) {
     const shipTypes = [
         {
@@ -42,6 +46,7 @@ function dragndrop(selection, gameboard) {
             shipSelected.isSelected = true;
         }
     });
+    let prevElement = null;
     document.addEventListener('mouseover', (e) => drag(e, target, shipType, shipSelected, queue, gameboard));
 }
 
@@ -54,31 +59,44 @@ function drag(e, ship, shipType, selected, queue, gameboard) {
     ship.style.top = e.pageY + 'px';
 
     const target = e.target;
-    const shipLength = shipType.length;
-    
+    const shipLength = shipType?.length;
+
     if (target.classList.contains('square')) {
-        console.log(queue)
         queue.forEach(element => {
             element.style.background = '';
         });
 
         const position = target.dataset.position.split(' ');
-        const color = (+position[0] + shipLength - 1) <= 9 ? `rgba(66, 184, 131, .5)` : `rgba(194, 77, 44, .5)` 
-        
+        const color = (+position[0] + shipLength - 1) <= 9 ? `rgba(66, 184, 131, .5)` : `rgba(194, 77, 44, .5)`
+
         for (let i = 0; i < shipLength; i++) {
             const square = document.querySelector(`[data-position="${+position[0] + i} ${+position[1]}"]`);
-            square.style.background = color;
-            queue.push(square);
+            if (square) {
+                square.style.background = color;
+                queue.push(square);
+            }
         }
-        
-        drop(gameboard, shipType, target);
+
+        target.onclick = () => {
+            if ((+position[0] + shipLength - 1) <= 9) {
+                drop(gameboard, shipType, ship, target);
+                queue.forEach(element => {
+                    element.style.background = '';
+                });
+                selected.isSelected = false;
+            }
+        }
     }
 }
 
-function drop(gameboard, ship, target) {
+function drop(gameboard, shipType, ship, target) {
     const selection = document.querySelector('.selection');
     const board = document.querySelector('.board');
-    console.log();
+    const positions = target.dataset.position.split(' ').map(p => +p);
+
+    selection.removeChild(ship);
+    const battleShip = new Ship(shipType.length, shipType.name);
+    appearElement(board, loadSingleShip(positions[0], positions[1], battleShip));
 }
 
 export { dragndrop as default }
