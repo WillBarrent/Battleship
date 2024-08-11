@@ -62,9 +62,11 @@ describe('Testing Gameboard Class', () => {
         const gameboard = new Gameboard();
         const battleship = new Ship(4);
         gameboard.placeShip(battleship, [5 , 4]);
-        gameboard.receiveAttack(6, 5);
-        gameboard.receiveAttack(7, 5);
-        gameboard.receiveAttack(8, 5);
+        gameboard.receiveAttack(5, 4);
+        gameboard.receiveAttack(6, 4);
+        gameboard.receiveAttack(7, 4);
+        gameboard.receiveAttack(8, 4);
+        gameboard.receiveAttack(9, 4);
         expect(gameboard.isAllShipSunk()).toBe(true);
     });
 })
