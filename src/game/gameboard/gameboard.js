@@ -26,7 +26,7 @@ class Gameboard {
     getShipPositions() {
         return this.#shipsPosition;
     }
-    
+
     getShipTypes() {
         return this.#shipsTypes;
     }
@@ -77,7 +77,7 @@ class Gameboard {
             || attackCoord === this.#missed) {
             return false;
         }
-        
+
         this.#board[x][y].hit();
         (this.#board)[x][y] = this.#hitted;
 
@@ -85,17 +85,17 @@ class Gameboard {
     }
 
     isAllShipSunk() {
-        const allShips = this.#shipsPosition;
-        const isHitted = true;
+        let isHitted = false;
         const board = this.getGameBoard();
-        let x, y, ship;
-        x = y = ship = null;
+        let boardValues = [];
 
-        for (let i = 0; i < allShips.length && isHitted != true; i++) {
-            x = allShips[i][0], y = allShips[i][1];
-            ship = board[x][y];
-            if (ship.isSunk())
-                isHitted = true;
+        for (let i = 0; i < 10; i++) {
+            const values = Object.values(board[i]);
+            boardValues = [...boardValues, ...values]
+        }
+
+        if (!boardValues.find(value => value instanceof Ship)) {
+            isHitted = true
         }
 
         return isHitted;
