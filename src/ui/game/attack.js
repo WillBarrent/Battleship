@@ -6,6 +6,7 @@ import Miss from '../../assets/water.png';
 import { createElement } from "../utils/createElement";
 import { loadImage } from "../utils/loadImage";
 import { loadSingleShip } from "./ship";
+import restartTheGame from "./restart";
 
 function attackMoves(player, ai) {
     const playerBoard = document.querySelector('.board');
@@ -25,6 +26,11 @@ function attackMoves(player, ai) {
             playerTurn(target, aiGameboard, aiBoard, X, Y);
 
             aiTurn(playerGameboard, playerBoard, ai);
+
+            if (aiGameboard.isAllShipSunk() || playerGameboard.isAllShipSunk()) {
+                const loser = aiGameboard.isAllShipSunk ? "ai" : 'player';
+                restartTheGame(loser);
+            }
         }
     })
 }
@@ -107,6 +113,7 @@ function fieldDisclosure(shipLength, coords, board, gameboard) {
         surFields.forEach(sur => {
             surX = sur[0] + x, surY = sur[1] + y;
             if ((surX) >= 0 && (surY) >= 0
+                && (surX) >= 0 && (surY) >= 0
                 && gameboard[surX][surY]
                 && gameboard[surX][surY] !== 'M'
                 && gameboard[surX][surY] !== 'H') {
