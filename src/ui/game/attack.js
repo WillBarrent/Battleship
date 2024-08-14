@@ -113,7 +113,7 @@ function fieldDisclosure(shipLength, coords, board, gameboard) {
         surFields.forEach(sur => {
             surX = sur[0] + x, surY = sur[1] + y;
             if ((surX) >= 0 && (surY) >= 0
-                && (surX) >= 0 && (surY) >= 0
+                && (surX) <= 9 && (surY) <= 9
                 && gameboard[surX][surY]
                 && gameboard[surX][surY] !== 'M'
                 && gameboard[surX][surY] !== 'H') {
