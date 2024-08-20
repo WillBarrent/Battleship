@@ -35,7 +35,7 @@ function dragndrop(selection, player) {
 
     let queue = [];
 
-    selection.addEventListener('click', (e) => {
+    selection.addEventListener('mousedown', (e) => {
         target = e.target.closest('div');
         shipType = shipTypes.find(type => type.name === target?.className);
 
