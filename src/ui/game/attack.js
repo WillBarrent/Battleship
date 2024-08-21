@@ -7,6 +7,7 @@ import { createElement } from "../utils/createElement";
 import { loadImage } from "../utils/loadImage";
 import { loadSingleShip } from "./ship";
 import restartTheGame from "./restart";
+import { rocketAttack, test, turnOffBoard, turnOnBoard } from "./rocket";
 
 function attackMoves(player, ai) {
     const playerBoard = document.querySelector('.board');
@@ -15,7 +16,7 @@ function attackMoves(player, ai) {
     const playerGameboard = player.gameboard;
     const aiGameboard = ai.gameboard;
 
-    aiBoard.addEventListener('click', function (e) {
+    aiBoard.addEventListener('click', async function (e) {
         const target = e.target;
 
         if (target.classList.contains('square')) {
@@ -25,7 +26,14 @@ function attackMoves(player, ai) {
 
             playerTurn(target, aiGameboard, aiBoard, X, Y);
 
+            turnOffBoard(aiBoard);
+            const playersRocketAttacking = await rocketAttack();
+
             aiTurn(playerGameboard, playerBoard, ai);
+
+            const aiRocketAtacking = await rocketAttack();
+
+            turnOnBoard('ai');
 
             if (aiGameboard.isAllShipSunk() || playerGameboard.isAllShipSunk()) {
                 const loser = aiGameboard.isAllShipSunk ? "ai" : 'player';
