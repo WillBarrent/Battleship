@@ -2,6 +2,7 @@ import { appearElement } from "../utils/appearElement";
 import { createElement } from "../utils/createElement";
 
 import Radar from '../../assets/radar.png';
+import { createRocket } from "./rocket";
 
 function createBoard(boardType = 'player') {
     const board = createElement('div', 'board');
@@ -34,6 +35,9 @@ function createBoard(boardType = 'player') {
             appearElement(board, div);
         }
     }
+
+    const rocket = createRocket();
+    appearElement(board, rocket);
 
     return board;
 }
